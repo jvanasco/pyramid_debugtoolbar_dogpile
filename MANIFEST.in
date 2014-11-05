@@ -1,0 +1,1 @@
+include pyramid_debugtoolbar_dogpile/panels/templates/*
