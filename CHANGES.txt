@@ -1,4 +1,8 @@
+0.0.x - 2014.12.25
+	adding `screenshot.png`
+
 0.0.2 - 2014.11.05
-	addming README.md to manifest
+	adding README.md to manifest
+
 0.0.1 - 2014.11.05
 	initial import
