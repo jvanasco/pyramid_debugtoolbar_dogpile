@@ -37,3 +37,13 @@ how to use this
 	from pyramid_debugtoolbar_dogpile import LoggingProxy as DogpileLoggingProxy
 
 
+What does it look like?
+=======================
+
+The panel renders in two parts:
+
+First Section - topline statistics
+
+Second Section - chronological list of cache operations. API calls and results are color-coded for quick review.
+
+![ScreenShot](https://raw.github.com/jvanasco/pyramid_debugtoolbar_dogpile/master/screenshot.png)
