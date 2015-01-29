@@ -1,3 +1,7 @@
+0.0.3 - 2015.01.29
+	merge https://github.com/jvanasco/pyramid_debugtoolbar_dogpile/pull/1
+		- Prevents AttributeError when no current request
+
 0.0.x - 2014.12.25
 	adding `screenshot.png`
 	adding screenshot to readme
