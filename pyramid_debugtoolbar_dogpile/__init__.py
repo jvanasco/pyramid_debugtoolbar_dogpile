@@ -50,7 +50,8 @@ class LoggingProxy(ProxyBackend):
         _f = time.time()
         _d = _f - _s
         r = get_current_request()
-        r.dogpile_logging['api_calls'].append(("set", _d, [(key, None), ]))
+        if r:
+            r.dogpile_logging['api_calls'].append(("set", _d, [(key, None), ]))
 
     def set_multi(self, mapping):
         _s = time.time()
@@ -59,8 +60,9 @@ class LoggingProxy(ProxyBackend):
         _d = _f - _s
 
         r = get_current_request()
-        _kvs = [(k, None) for k in mapping.keys()]
-        r.dogpile_logging['api_calls'].append(("set_multi", _d, _kvs))
+        if r:
+            _kvs = [(k, None) for k in mapping.keys()]
+            r.dogpile_logging['api_calls'].append(("set_multi", _d, _kvs))
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -71,7 +73,8 @@ class LoggingProxy(ProxyBackend):
         _d = _f - _s
 
         r = get_current_request()
-        r.dogpile_logging['api_calls'].append(("get", _d, [(key, True if v is not NO_VALUE else False), ]))
+        if r:
+            r.dogpile_logging['api_calls'].append(("get", _d, [(key, True if v is not NO_VALUE else False), ]))
         return v
 
     def get_multi(self, keys):
@@ -81,8 +84,9 @@ class LoggingProxy(ProxyBackend):
         _d = _f - _s
 
         r = get_current_request()
-        _results = [(k, True if v is not NO_VALUE else False) for (k, v) in vs.iteritems()]
-        r.dogpile_logging['api_calls'].append(("get_multi", _d, _results))
+        if r:
+            _results = [(k, True if v is not NO_VALUE else False) for (k, v) in vs.iteritems()]
+            r.dogpile_logging['api_calls'].append(("get_multi", _d, _results))
         return vs
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -93,7 +97,8 @@ class LoggingProxy(ProxyBackend):
         _f = time.time()
         _d = _f - _s
         r = get_current_request()
-        r.dogpile_logging['api_calls'].append(("delete", _d, [(key, None), ]))
+        if r:
+            r.dogpile_logging['api_calls'].append(("delete", _d, [(key, None), ]))
 
     def delete_multi(self, keys):
         _s = time.time()
@@ -102,5 +107,6 @@ class LoggingProxy(ProxyBackend):
         _d = _f - _s
 
         r = get_current_request()
-        _kvs = [(k, None) for k in keys]
-        r.dogpile_logging['api_calls'].append(("delete_multi", _d, _kvs))
+        if r:
+            _kvs = [(k, None) for k in keys]
+            r.dogpile_logging['api_calls'].append(("delete_multi", _d, _kvs))
