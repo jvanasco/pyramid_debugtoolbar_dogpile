@@ -9,6 +9,8 @@
 			<th>Total Calls</th>
 			<th>Hits</th>
 			<th>Misses</th>
+			<th>Fractional Hits</th>
+			<th>Fractional Misses</th>
 		</tr>
 	</thead>
 	% for api_call in stats.keys():
@@ -18,6 +20,8 @@
 			<td>${stats[api_call]['total']}</td>
 			<td>${stats[api_call]['hit']}</td>
 			<td>${stats[api_call]['miss']}</td>
+			<td>${stats[api_call]['fractional-hit']}</td>
+			<td>${stats[api_call]['fractional-miss']}</td>
 		</tr>
 	% endfor
 </table>

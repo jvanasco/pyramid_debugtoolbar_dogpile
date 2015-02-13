@@ -1,3 +1,7 @@
+0.0.4 - 2015.02.13
+	fixed a bug on get_multi logging handler. it would prevent cache pulls.
+	logging fractional hits/misses
+
 0.0.3 - 2015.01.29
 	merge https://github.com/jvanasco/pyramid_debugtoolbar_dogpile/pull/1
 		- Prevents AttributeError when no current request

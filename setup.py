@@ -15,7 +15,7 @@ setup(
     author="Jonathan Vanasco",
     author_email="jonathan@findmeon.com",
     url="https://github.com/jvanasco/pyramid_debugtoolbar_dogpile",
-    version="0.0.3",
+    version="0.0.4",
     description="dogpile support for pyramid_debugtoolbar",
     keywords="web pyramid",
     license="MIT",

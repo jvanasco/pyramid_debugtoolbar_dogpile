@@ -44,6 +44,8 @@ class DogpileDebugPanel(DebugPanel):
             stats[api_call] = {
                 'hit': 0,
                 'miss': 0,
+                'fractional-hit': 0,
+                'fractional-miss': 0,
                 'total': 0,
                 'total_time': 0,
             }
@@ -53,11 +55,18 @@ class DogpileDebugPanel(DebugPanel):
             stats[r[0]]['total_time'] += r[1]
             # dk - dogpile key
             # dr - dogpile result
-            for (dk, dr) in r[2]:
-                if dr is True:
-                    stats[r[0]]['hit'] += 1
-                elif dr is False:
-                    stats[r[0]]['miss'] += 1
+            if r[0] == 'get_multi':
+                for (dk, dr) in r[2]:
+                    if dr is True:
+                        stats[r[0]]['fractional-hit'] += 1
+                    elif dr is False:
+                        stats[r[0]]['fractional-miss'] += 1
+            else:
+                for (dk, dr) in r[2]:
+                    if dr is True:
+                        stats[r[0]]['hit'] += 1
+                    elif dr is False:
+                        stats[r[0]]['miss'] += 1
 
         self.data = {
             'logs': self.logs,

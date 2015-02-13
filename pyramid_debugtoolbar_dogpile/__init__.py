@@ -85,8 +85,9 @@ class LoggingProxy(ProxyBackend):
 
         r = get_current_request()
         if r:
-            _results = [(k, True if v is not NO_VALUE else False) for (k, v) in vs.iteritems()]
-            r.dogpile_logging['api_calls'].append(("get_multi", _d, _results))
+            _results = [(True if v is not NO_VALUE else False) for v in vs]
+            _dictionary = dict(zip(keys, _results))
+            r.dogpile_logging['api_calls'].append(("get_multi", _d, _dictionary.items()))
         return vs
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
