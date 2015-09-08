@@ -32,7 +32,7 @@ def setup_dogpile_logging(request):
     """
         calls_raw =  ordered list of calls
     """
-    print "initializing setup_dogpile_logging"
+    logging.debug('initializing setup_dogpile_logging')
     return {
         'api_calls': [],  # (api_call, duration, (k + result))
     }
