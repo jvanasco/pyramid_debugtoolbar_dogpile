@@ -1,3 +1,7 @@
+0.0.5 - 2015.02.13
+	merge https://github.com/jvanasco/pyramid_debugtoolbar_dogpile/pull/2
+		- erroneous call to `print ""` instead of `logging.debug()`
+
 0.0.4 - 2015.02.13
 	fixed a bug on get_multi logging handler. it would prevent cache hits from being correctly recognized.
 	logging fractional hits/misses
