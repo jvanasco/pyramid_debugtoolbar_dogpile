@@ -4,9 +4,12 @@ import os
 from setuptools import setup
 from setuptools import find_packages
 
-here = os.path.abspath(os.path.dirname(__file__))
-README = open(os.path.join(here, "README.md")).read()
-README = README.split("\n\n", 1)[0] + "\n"
+try:
+    here = os.path.abspath(os.path.dirname(__file__))
+    README = open(os.path.join(here, "README.md")).read()
+    README = README.split("\n\n", 1)[0] + "\n"
+except:
+    README = ''
 
 requires = ['pyramid_debugtoolbar>=2.2', ]
 
@@ -15,7 +18,7 @@ setup(
     author="Jonathan Vanasco",
     author_email="jonathan@findmeon.com",
     url="https://github.com/jvanasco/pyramid_debugtoolbar_dogpile",
-    version="0.0.5",
+    version="0.0.6",
     description="dogpile support for pyramid_debugtoolbar",
     keywords="web pyramid",
     license="MIT",

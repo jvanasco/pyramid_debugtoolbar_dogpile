@@ -1,3 +1,6 @@
+0.0.6 - 2015.11.13
+	packaging fix.
+
 0.0.5 - 2015.02.13
 	merge https://github.com/jvanasco/pyramid_debugtoolbar_dogpile/pull/2
 		- erroneous call to `print ""` instead of `logging.debug()`
