@@ -17,11 +17,11 @@
 		<tr>
 			<td>${api_call}</td>
 			<td>${'%.8f' %  stats[api_call]['total_time']}</td>
-			<td>${stats[api_call]['total']}</td>
-			<td>${stats[api_call]['hit']}</td>
-			<td>${stats[api_call]['miss']}</td>
-			<td>${stats[api_call]['fractional-hit']}</td>
-			<td>${stats[api_call]['fractional-miss']}</td>
+			<td><span class="badge">${stats[api_call]['total'] or ''}</span></td>
+			<td><span class="badge">${stats[api_call]['hit'] or ''}</span></td>
+			<td><span class="badge">${stats[api_call]['miss'] or ''}</span></td>
+			<td><span class="badge">${stats[api_call]['fractional-hit'] or ''}</span></td>
+			<td><span class="badge">${stats[api_call]['fractional-miss'] or ''}</span></td>
 		</tr>
 	% endfor
 </table>
@@ -38,6 +38,7 @@
 		</tr>
 	</thead>
 	% for row in logs:
+		<% is_action_set = False %>
 		## to handle the multiple value ones, we'll loop over the results tuple in row[2]
 		% for idx, (dogpilekey, api_result) in enumerate(row[2]):
 			<tr>
@@ -49,6 +50,7 @@
 								_class = "warning"
 							if row[0] in ('set', 'set_multi'):
 								_class = "info"
+								is_action_set = True
 						%>
 						<span class="label label-${_class}">
 							${row[0]}
@@ -68,9 +70,11 @@
 							_text = "miss"
 						elif _text is None:
 							_text = " "
+							if is_action_set:
+								_text = '<i class="glyphicon glyphicon-circle-arrow-up"></i>'
 					%>
 					<span class="label label-${_class}">
-						${_text}
+						${_text|n}
 					</span>
 				</td>
 				<td>
