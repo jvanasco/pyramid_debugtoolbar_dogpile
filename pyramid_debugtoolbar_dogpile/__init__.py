@@ -50,7 +50,7 @@ class LoggingProxy(ProxyBackend):
         _f = time.time()
         _d = _f - _s
         r = get_current_request()
-        if r:
+        if r and hasattr(r, 'dogpile_logging'):
             r.dogpile_logging['api_calls'].append(("set", _d, [(key, None), ]))
 
     def set_multi(self, mapping):
@@ -60,7 +60,7 @@ class LoggingProxy(ProxyBackend):
         _d = _f - _s
 
         r = get_current_request()
-        if r:
+        if r and hasattr(r, 'dogpile_logging'):
             _kvs = [(k, None) for k in mapping.keys()]
             r.dogpile_logging['api_calls'].append(("set_multi", _d, _kvs))
 
@@ -73,7 +73,7 @@ class LoggingProxy(ProxyBackend):
         _d = _f - _s
 
         r = get_current_request()
-        if r:
+        if r and hasattr(r, 'dogpile_logging'):
             r.dogpile_logging['api_calls'].append(("get", _d, [(key, True if v is not NO_VALUE else False), ]))
         return v
 
@@ -84,7 +84,7 @@ class LoggingProxy(ProxyBackend):
         _d = _f - _s
 
         r = get_current_request()
-        if r:
+        if r and hasattr(r, 'dogpile_logging'):
             _results = [(True if v is not NO_VALUE else False) for v in vs]
             _dictionary = dict(zip(keys, _results))
             r.dogpile_logging['api_calls'].append(("get_multi", _d, _dictionary.items()))
@@ -98,7 +98,7 @@ class LoggingProxy(ProxyBackend):
         _f = time.time()
         _d = _f - _s
         r = get_current_request()
-        if r:
+        if r and hasattr(r, 'dogpile_logging'):
             r.dogpile_logging['api_calls'].append(("delete", _d, [(key, None), ]))
 
     def delete_multi(self, keys):
@@ -108,6 +108,6 @@ class LoggingProxy(ProxyBackend):
         _d = _f - _s
 
         r = get_current_request()
-        if r:
+        if r and hasattr(r, 'dogpile_logging'):
             _kvs = [(k, None) for k in keys]
             r.dogpile_logging['api_calls'].append(("delete_multi", _d, _kvs))
