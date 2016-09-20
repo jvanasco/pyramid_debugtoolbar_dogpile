@@ -56,13 +56,13 @@ class DogpileDebugPanel(DebugPanel):
             # dk - dogpile key
             # dr - dogpile result
             if r[0] == 'get_multi':
-                for (dk, dr) in r[2]:
+                for (dk, dr) in r[3]:
                     if dr is True:
                         stats[r[0]]['fractional-hit'] += 1
                     elif dr is False:
                         stats[r[0]]['fractional-miss'] += 1
             else:
-                for (dk, dr) in r[2]:
+                for (dk, dr) in r[3]:
                     if dr is True:
                         stats[r[0]]['hit'] += 1
                     elif dr is False:

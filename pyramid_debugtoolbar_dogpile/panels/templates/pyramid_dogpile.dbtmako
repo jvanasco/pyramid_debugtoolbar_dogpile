@@ -33,14 +33,16 @@
 	<thead>
 		<tr>
 			<th>Api Call</th>
+			<th>DB</th>
 			<th>Key/Result</th>
+			<th></th>
 			<th>Time</th>
 		</tr>
 	</thead>
 	% for row in logs:
 		<% is_action_set = False %>
-		## to handle the multiple value ones, we'll loop over the results tuple in row[2]
-		% for idx, (dogpilekey, api_result) in enumerate(row[2]):
+		## to handle the multiple value ones, we'll loop over the results tuple in row[3]
+		% for idx, (dogpilekey, api_result) in enumerate(row[3]):
 			<tr>
 				<td>
 					% if idx == 0:
@@ -57,7 +59,8 @@
 						</span>
 					% endif
 				</td>
-				<td>${dogpilekey}</td>
+				<td><span class="label label-default">${row[2]}</span></td>
+				<td><code>${dogpilekey}</code></td>
 				<td>
 					<%
 						_class = "default"
