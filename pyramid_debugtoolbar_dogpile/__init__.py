@@ -110,7 +110,7 @@ class LoggingProxy(ProxyBackend):
         if r and hasattr(r, 'dogpile_logging'):
             _results = [(True if v is not NO_VALUE else False) for v in vs]
             _dictionary = dict(zip(keys, _results))
-            r.dogpile_logging['api_calls'].append(("get_multi", _d, _self.db, dictionary.items()))
+            r.dogpile_logging['api_calls'].append(("get_multi", _d, self.db, _dictionary.items()))
         return vs
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
