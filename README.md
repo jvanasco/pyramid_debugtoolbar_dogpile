@@ -24,18 +24,29 @@ This package works by wrapping requests to dogpile regions into a Proxy Backend.
 
 
 
-how to use this
-===============
+how to use this package
+=======================
 
+You can install via github's master or grab a pypi distribution!
+
+	pip install pyramid_debugtoolbar_dogpile
+	easy_install pyramid_debugtoolbar_dogpile
 
 1. update your ENVIRONMENT.ini file
 
 	pyramid.includes = ... pyramid_debugtoolbar_dogpile
 
-
-2. update your caching definition to use the proxy:
+2. update your caching configuration to use the proxy:
 
 	from pyramid_debugtoolbar_dogpile import LoggingProxy as DogpileLoggingProxy
+
+	cache_config = {}
+	...
+    cache_config['wrap'] = [DogpileLoggingProxy, ]
+    region = make_region()
+    region.configure_from_config(cache_config)
+
+    
 
 
 What does it look like?
