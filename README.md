@@ -14,9 +14,9 @@ This package tracks the following dogpile api calls :
 
 Your pyramid_debugtoolbar will have a "Dogpile" panel that lists:
 
-	* the number of calls (in tab header)
-	* statistics on cache hits/misses/timing per api call type
-	* a listing of all calls that features: call, key, hit/miss, timing
+* the number of calls (in tab header)
+* statistics on cache hits/misses/timing per api call type
+* a listing of all calls that features: call, key, hit/miss, timing
 	
 As of v0.1.4 you can filter the keys on the panel. yay.
 
@@ -34,19 +34,17 @@ You can install via github's master or grab a pypi distribution!
 
 1. update your ENVIRONMENT.ini file
 
-	pyramid.includes = ... pyramid_debugtoolbar_dogpile
+    pyramid.includes = ... pyramid_debugtoolbar_dogpile
 
 2. update your caching configuration to use the proxy:
 
-	from pyramid_debugtoolbar_dogpile import LoggingProxy as DogpileLoggingProxy
+    from pyramid_debugtoolbar_dogpile import LoggingProxy as DogpileLoggingProxy
 
-	cache_config = {}
-	...
+    cache_config = {}
+    ...
     cache_config['wrap'] = [DogpileLoggingProxy, ]
     region = make_region()
     region.configure_from_config(cache_config)
-
-    
 
 
 What does it look like?
