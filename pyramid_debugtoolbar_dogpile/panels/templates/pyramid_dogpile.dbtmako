@@ -45,58 +45,82 @@
 
 
 <h3>Logging</h3>
+
+
+<form class="form-inline">
+  <div class="form-group">
+    <label for="dogpile-search">Key Filter</label>
+	<input class="form-control" id="dogpile-search" placeholder="Type To Filter">
+	<script type="text/javascript">
+	// via stackoverflow
+	$("#dogpile-search").keyup(function () {
+		var rows = $("#dogpile-calls").find("tr").hide();
+		if (this.value.length) {
+			var data = this.value.split(" ");
+			$.each(data, function (i, v) {
+				rows.find("td.key:contains('" + v + "')").parent().show();
+			});
+		} else rows.show();
+	});
+	</script>
+  </div>
+</form>
+
+
 <table class="table table-striped table-condensed">
 	<thead>
 		<tr>
 			<th>Api Call</th>
 			<th>DB</th>
-			<th>Key/Result</th>
-			<th></th>
+			<th>Key</th>
+			<th>Result</th>
 			<th>Time</th>
 		</tr>
 	</thead>
-	% for row in logs:
-        <%
-            is_action_set = False
-            api_call = row[0]
-            if api_call in ('set', 'set_multi'):
-                is_action_set = True
-        %>
-		## to handle the multiple value ones, we'll loop over the results tuple in row[3]
-		% for idx, (dogpilekey, api_result) in enumerate(row[3]):
-			<tr>
-				<td>
-					% if idx == 0:
-						${api_call_label(row[0])}
-					% endif
-				</td>
-				<td><span class="label label-default">${row[2]}</span></td>
-				<td><code>${dogpilekey}</code></td>
-				<td>
-					<%
-						_class = "default"
-						_text = api_result
-						if _text is True:
-							_class = "success"
-							_text = "hit"
-						elif _text is False:
-							_class = "danger"
-							_text = "miss"
-						elif _text is None:
-							_text = " "
-							if is_action_set:
-								_text = '<i class="glyphicon glyphicon-circle-arrow-up"></i>'
-					%>
-					<span class="label label-${_class}">
-						${_text|n}
-					</span>
-				</td>
-				<td>
-					% if idx == 0:
-						${'%.8f' % row[1]}
-					% endif
-				</td>
-			</tr>
+	<tbody id="dogpile-calls">
+		% for row in logs:
+			<%
+				is_action_set = False
+				api_call = row[0]
+				if api_call in ('set', 'set_multi'):
+					is_action_set = True
+			%>
+			## to handle the multiple value ones, we'll loop over the results tuple in row[3]
+			% for idx, (dogpilekey, api_result) in enumerate(row[3]):
+				<tr>
+					<td>
+						% if idx == 0:
+							${api_call_label(row[0])}
+						% endif
+					</td>
+					<td><span class="label label-default">${row[2]}</span></td>
+					<td class="key"><code>${dogpilekey}</code></td>
+					<td>
+						<%
+							_class = "default"
+							_text = api_result
+							if _text is True:
+								_class = "success"
+								_text = "hit"
+							elif _text is False:
+								_class = "danger"
+								_text = "miss"
+							elif _text is None:
+								_text = " "
+								if is_action_set:
+									_text = '<i class="glyphicon glyphicon-circle-arrow-up"></i>'
+						%>
+						<span class="label label-${_class}">
+							${_text|n}
+						</span>
+					</td>
+					<td>
+						% if idx == 0:
+							${'%.8f' % row[1]}
+						% endif
+					</td>
+				</tr>
+			% endfor
 		% endfor
-	% endfor
+	</tbody>
 </table>

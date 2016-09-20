@@ -17,10 +17,10 @@ Your pyramid_debugtoolbar will have a "Dogpile" panel that lists:
 	* the number of calls (in tab header)
 	* statistics on cache hits/misses/timing per api call type
 	* a listing of all calls that features: call, key, hit/miss, timing
+	
+As of v0.1.4 you can filter the keys on the panel. yay.
 
-This package works by wrapping requests to dogpile regions into a Proxy Backend
-
-This does have a bit of performance overhead, so make sure that you disable this LoggingProxy on production machines
+This package works by wrapping requests to dogpile regions into a Proxy Backend.  This has a significant performance overhead and relies on the DEBUG ONLY `get_current_request`, so make sure that you disable this LoggingProxy on production machines.
 
 
 
