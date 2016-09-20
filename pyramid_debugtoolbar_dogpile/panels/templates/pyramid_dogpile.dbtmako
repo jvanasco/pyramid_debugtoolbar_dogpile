@@ -1,3 +1,20 @@
+<%def name="api_call_label(api_call)">
+	<%doc>
+	Utility function used to display the right label for an `api_call`
+	</%doc>
+	<%
+		_class = "default"
+		if api_call in ('get', 'get_multi'):
+			_class = "warning"
+		if api_call in ('set', 'set_multi'):
+			_class = "info"
+	%>
+	<span class="label label-${_class}">
+		${api_call}
+	</span>
+</%def>
+
+
 <h3>Stats</h3>
 
 
@@ -13,9 +30,9 @@
 			<th>Fractional Misses</th>
 		</tr>
 	</thead>
-	% for api_call in stats.keys():
+	% for api_call in sorted(stats.keys()):
 		<tr>
-			<td>${api_call}</td>
+			<td>${api_call_label(api_call)}</td>
 			<td>${'%.8f' %  stats[api_call]['total_time']}</td>
 			<td><span class="badge">${stats[api_call]['total'] or ''}</span></td>
 			<td><span class="badge">${stats[api_call]['hit'] or ''}</span></td>
@@ -25,7 +42,6 @@
 		</tr>
 	% endfor
 </table>
-
 
 
 <h3>Logging</h3>
@@ -40,23 +56,18 @@
 		</tr>
 	</thead>
 	% for row in logs:
-		<% is_action_set = False %>
+        <%
+            is_action_set = False
+            api_call = row[0]
+            if api_call in ('set', 'set_multi'):
+                is_action_set = True
+        %>
 		## to handle the multiple value ones, we'll loop over the results tuple in row[3]
 		% for idx, (dogpilekey, api_result) in enumerate(row[3]):
 			<tr>
 				<td>
 					% if idx == 0:
-						<%
-							_class = "default"
-							if row[0] in ('get', 'get_multi'):
-								_class = "warning"
-							if row[0] in ('set', 'set_multi'):
-								_class = "info"
-								is_action_set = True
-						%>
-						<span class="label label-${_class}">
-							${row[0]}
-						</span>
+						${api_call_label(row[0])}
 					% endif
 				</td>
 				<td><span class="label label-default">${row[2]}</span></td>
@@ -86,8 +97,6 @@
 					% endif
 				</td>
 			</tr>
-
-
 		% endfor
 	% endfor
 </table>
