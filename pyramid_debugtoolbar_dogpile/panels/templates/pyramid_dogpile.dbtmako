@@ -33,7 +33,7 @@
 	% for api_call in sorted(stats.keys()):
 		<tr>
 			<td>${api_call_label(api_call)}</td>
-			<td>${'%.8f' %  stats[api_call]['total_time']}</td>
+			<td><code>${'%.8f' %  stats[api_call]['total_time']}</code></td>
 			<td><span class="badge">${stats[api_call]['total'] or ''}</span></td>
 			<td><span class="badge">${stats[api_call]['hit'] or ''}</span></td>
 			<td><span class="badge">${stats[api_call]['miss'] or ''}</span></td>
@@ -67,9 +67,10 @@
 </form>
 
 
-<table class="table table-striped table-condensed">
+<table class="table table-striped table-condensed pDebugSortable">
 	<thead>
 		<tr>
+			<th>Sequence</th>
 			<th>Api Call</th>
 			<th>DB</th>
 			<th>Key</th>
@@ -78,6 +79,7 @@
 		</tr>
 	</thead>
 	<tbody id="dogpile-calls">
+		<% idx_global = 0 %>
 		% for row in logs:
 			<%
 				is_action_set = False
@@ -87,7 +89,11 @@
 			%>
 			## to handle the multiple value ones, we'll loop over the results tuple in row[3]
 			% for idx, (dogpilekey, api_result) in enumerate(row[3]):
+				<%
+					idx_global += 1
+				%>
 				<tr>
+					<td><span style="display:none;">${idx_global}</span></td>
 					<td>
 						% if idx == 0:
 							${api_call_label(row[0])}
@@ -116,7 +122,7 @@
 					</td>
 					<td>
 						% if idx == 0:
-							${'%.8f' % row[1]}
+							<code>${'%.8f' % row[1]}</code>
 						% endif
 					</td>
 				</tr>
