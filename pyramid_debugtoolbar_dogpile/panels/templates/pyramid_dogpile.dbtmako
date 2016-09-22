@@ -28,6 +28,9 @@
 			<th>Misses</th>
 			<th>Fractional Hits</th>
 			<th>Fractional Misses</th>
+			% if has_size:
+				<th>Size</th>
+			% endif
 		</tr>
 	</thead>
 	% for api_call in sorted(stats.keys()):
@@ -39,6 +42,9 @@
 			<td><span class="badge">${stats[api_call]['miss'] or ''}</span></td>
 			<td><span class="badge">${stats[api_call]['fractional-hit'] or ''}</span></td>
 			<td><span class="badge">${stats[api_call]['fractional-miss'] or ''}</span></td>
+			% if has_size:
+				<td><span class="badge">${stats[api_call]['size'] or ''}</span></td>
+			% endif
 		</tr>
 	% endfor
 </table>
@@ -75,6 +81,9 @@
 			<th>DB</th>
 			<th>Key</th>
 			<th>Result</th>
+			% if has_size:
+				<th>Size?</th>
+			% endif
 			<th>Time</th>
 		</tr>
 	</thead>
@@ -88,7 +97,7 @@
 					is_action_set = True
 			%>
 			## to handle the multiple value ones, we'll loop over the results tuple in row[3]
-			% for idx, (dogpilekey, api_result) in enumerate(row[3]):
+			% for idx, (dogpilekey, api_result, api_size) in enumerate(row[3]):
 				<%
 					idx_global += 1
 				%>
@@ -120,6 +129,13 @@
 							${_text|n}
 						</span>
 					</td>
+					% if has_size:
+						<td>
+							% if api_size is not None:
+								<code>${api_size}</code>
+							% endif
+						</td>
+					% endif
 					<td>
 						% if idx == 0:
 							<code>${'%.8f' % row[1]}</code>

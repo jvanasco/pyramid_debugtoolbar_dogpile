@@ -1,4 +1,5 @@
 # stdlib
+from collections import namedtuple
 import logging
 import time
 
@@ -6,13 +7,20 @@ import time
 from pyramid.threadlocal import get_current_request
 
 # dogpile
-import dogpile
 from dogpile.cache.api import NO_VALUE, CachedValue
 from dogpile.cache.proxy import ProxyBackend
 
-
 # local
 from .panels.pyramid_dogpile import DogpileDebugPanel
+
+
+# ==============================================================================
+
+
+LoggedEvent = namedtuple('LoggedEvent', ['key', 'value', 'size', ])
+
+
+# ==============================================================================
 
 
 def includeme(config):
@@ -42,6 +50,9 @@ class LoggingProxy(ProxyBackend):
     """
     This is an instance of ProxyBackend
     It times the performance of the backend and logs if we see cache hits or misses
+    
+    Each entry is a 
+    
     """
     _connection_kwargs = None
     _db = None
@@ -75,7 +86,7 @@ class LoggingProxy(ProxyBackend):
         _d = _f - _s
         r = get_current_request()
         if r and hasattr(r, 'dogpile_logging'):
-            r.dogpile_logging['api_calls'].append(("set", _d, self.db, [(key, None), ]))
+            r.dogpile_logging['api_calls'].append(("set", _d, self.db, [LoggedEvent(key, None, None), ]))
 
     def set_multi(self, mapping):
         _s = time.time()
@@ -85,7 +96,9 @@ class LoggingProxy(ProxyBackend):
 
         r = get_current_request()
         if r and hasattr(r, 'dogpile_logging'):
-            _kvs = [(k, None) for k in mapping.keys()]
+            _kvs = [LoggedEvent(k, None, None)
+                    for k in mapping.keys()
+                    ]
             r.dogpile_logging['api_calls'].append(("set_multi", _d, self.db, _kvs))
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -98,7 +111,11 @@ class LoggingProxy(ProxyBackend):
 
         r = get_current_request()
         if r and hasattr(r, 'dogpile_logging'):
-            r.dogpile_logging['api_calls'].append(("get", _d, self.db, [(key, True if v is not NO_VALUE else False), ]))
+            r.dogpile_logging['api_calls'].append(("get", _d, self.db, [LoggedEvent(key,
+                                                                                    True if v is not NO_VALUE else False,
+                                                                                    v.metadata.get('sz', None) if isinstance(v, CachedValue) else None,
+                                                                                    ),
+                                                                        ]))
         return v
 
     def get_multi(self, keys):
@@ -108,9 +125,15 @@ class LoggingProxy(ProxyBackend):
         _d = _f - _s
         r = get_current_request()
         if r and hasattr(r, 'dogpile_logging'):
-            _results = [(True if v is not NO_VALUE else False) for v in vs]
-            _dictionary = dict(zip(keys, _results))
-            r.dogpile_logging['api_calls'].append(("get_multi", _d, self.db, _dictionary.items()))
+            _results = []
+            for (idx, k) in enumerate(keys):
+                v = vs[idx]
+                _results.append(LoggedEvent(k,
+                                            True if v is not NO_VALUE else False,
+                                            v.metadata.get('sz', None) if isinstance(v, CachedValue) else None,
+                                            )
+                                )
+            r.dogpile_logging['api_calls'].append(("get_multi", _d, self.db, _results))
         return vs
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -122,7 +145,7 @@ class LoggingProxy(ProxyBackend):
         _d = _f - _s
         r = get_current_request()
         if r and hasattr(r, 'dogpile_logging'):
-            r.dogpile_logging['api_calls'].append(("delete", _d, self.db, [(key, None), ]))
+            r.dogpile_logging['api_calls'].append(("delete", _d, self.db, [LoggedEvent(key, None, None), ]))
 
     def delete_multi(self, keys):
         _s = time.time()
@@ -132,5 +155,7 @@ class LoggingProxy(ProxyBackend):
 
         r = get_current_request()
         if r and hasattr(r, 'dogpile_logging'):
-            _kvs = [(k, None) for k in keys]
+            _kvs = [LoggedEvent(k, None, None)
+                    for k in keys
+                    ]
             r.dogpile_logging['api_calls'].append(("delete_multi", self.db, _d, _kvs))

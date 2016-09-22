@@ -48,6 +48,7 @@ class DogpileDebugPanel(DebugPanel):
                 'fractional-miss': 0,
                 'total': 0,
                 'total_time': 0,
+                'size': 0,
             }
 
         for r in self.logs:
@@ -56,21 +57,30 @@ class DogpileDebugPanel(DebugPanel):
             # dk - dogpile key
             # dr - dogpile result
             if r[0] == 'get_multi':
-                for (dk, dr) in r[3]:
+                for (dk, dr, dsize) in r[3]:
                     if dr is True:
                         stats[r[0]]['fractional-hit'] += 1
                     elif dr is False:
                         stats[r[0]]['fractional-miss'] += 1
+                    if dsize is not None:
+                        stats[r[0]]['size'] += dsize
             else:
-                for (dk, dr) in r[3]:
+                for (dk, dr, dsize) in r[3]:
                     if dr is True:
                         stats[r[0]]['hit'] += 1
                     elif dr is False:
                         stats[r[0]]['miss'] += 1
+                    if dsize is not None:
+                        stats[r[0]]['size'] += dsize
+
+        total_size = 0
+        for api_call in ('get', 'get_multi', 'set', 'set_multi', 'delete', 'delete_multi', ):
+            total_size += stats[api_call]['size']
 
         self.data = {
             'logs': self.logs,
             'stats': stats,
+            'has_size': bool(total_size),
         }
         return super(DogpileDebugPanel, self).render_content(request)
 
