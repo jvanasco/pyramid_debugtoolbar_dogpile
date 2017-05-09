@@ -18,8 +18,9 @@ setup(
     author="Jonathan Vanasco",
     author_email="jonathan@findmeon.com",
     url="https://github.com/jvanasco/pyramid_debugtoolbar_dogpile",
-    version="0.1.5",
+    version="0.2.0",
     description="dogpile support for pyramid_debugtoolbar",
+    long_description=README,
     keywords="web pyramid",
     license="MIT",
     classifiers=[
@@ -28,7 +29,6 @@ setup(
         "Programming Language :: Python",
         "License :: OSI Approved :: MIT License",
     ],
-    long_description=README,
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,

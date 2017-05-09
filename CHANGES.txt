@@ -1,3 +1,7 @@
+0.2,0 - 2017.05.09
+	cleaned up some html
+	changing include to extra_panels so it works with debugtoolbar 4.0
+
 0.1.5 - 2016.09.22
 	feature, experimental- track cache size
 

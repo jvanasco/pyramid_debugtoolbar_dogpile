@@ -33,20 +33,34 @@
 			% endif
 		</tr>
 	</thead>
-	% for api_call in sorted(stats.keys()):
+	<tbody>
 		<tr>
-			<td>${api_call_label(api_call)}</td>
-			<td><code>${'%.8f' %  stats[api_call]['total_time']}</code></td>
-			<td><span class="badge">${stats[api_call]['total'] or ''}</span></td>
-			<td><span class="badge">${stats[api_call]['hit'] or ''}</span></td>
-			<td><span class="badge">${stats[api_call]['miss'] or ''}</span></td>
-			<td><span class="badge">${stats[api_call]['fractional-hit'] or ''}</span></td>
-			<td><span class="badge">${stats[api_call]['fractional-miss'] or ''}</span></td>
+			<th>TOTAL</th>
+			<td><code>${'%.8f' % sum([stats[i]['total_time'] for i in stats])}</code></td>
+			<td><span class="badge">${sum([stats[i]['total'] for i in stats]) or ''}</span></td>
+			<td><span class="badge">${sum([stats[i]['hit'] for i in stats]) or ''}</span></td>
+			<td><span class="badge">${sum([stats[i]['miss'] for i in stats]) or ''}</span></td>
+			<td><span class="badge">${sum([stats[i]['fractional-hit'] for i in stats]) or ''}</span></td>
+			<td><span class="badge">${sum([stats[i]['fractional-miss'] for i in stats]) or ''}</span></td>
 			% if has_size:
-				<td><span class="badge">${stats[api_call]['size'] or ''}</span></td>
+				<td><span class="badge">${sum([stats[i]['size'] for i in stats])}</span></td>
 			% endif
 		</tr>
-	% endfor
+		% for api_call in sorted(stats.keys()):
+			<tr>
+				<td>${api_call_label(api_call)}</td>
+				<td><code>${'%.8f' %  stats[api_call]['total_time']}</code></td>
+				<td><span class="badge">${stats[api_call]['total'] or ''}</span></td>
+				<td><span class="badge">${stats[api_call]['hit'] or ''}</span></td>
+				<td><span class="badge">${stats[api_call]['miss'] or ''}</span></td>
+				<td><span class="badge">${stats[api_call]['fractional-hit'] or ''}</span></td>
+				<td><span class="badge">${stats[api_call]['fractional-miss'] or ''}</span></td>
+				% if has_size:
+					<td><span class="badge">${stats[api_call]['size'] or ''}</span></td>
+				% endif
+			</tr>
+		% endfor
+	<tbody>
 </table>
 
 
@@ -102,7 +116,11 @@
 					idx_global += 1
 				%>
 				<tr>
-					<td><span style="display:none;">${idx_global}</span></td>
+					<td>
+						## this is hidden because it's just a "sequence" we assigne for sorting.
+						## This is irrelevant and misleading as a "get_many" will assign many sequence ids in this panel
+						<span style="display:none;">${idx_global}</span>
+					</td>
 					<td>
 						% if idx == 0:
 							${api_call_label(row[0])}

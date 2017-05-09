@@ -1,7 +1,4 @@
 # stdlib
-import datetime
-import logging
-import time
 
 # pyramid_debugtoolbar
 from pyramid_debugtoolbar.panels import DebugPanel
@@ -10,6 +7,15 @@ from pyramid_debugtoolbar.utils import ROOT_ROUTE_NAME
 
 
 # ==============================================================================
+
+
+dogpile_api_calls = ('get',
+                     'get_multi',
+                     'set',
+                     'set_multi',
+                     'delete',
+                     'delete_multi',
+                     )
 
 
 class DogpileDebugPanel(DebugPanel):
@@ -38,19 +44,16 @@ class DogpileDebugPanel(DebugPanel):
     def render_content(self, request):
         if not self.logs:
             return 'No logs in request.'
-
         stats = {}
-        for api_call in ('get', 'get_multi', 'set', 'set_multi', 'delete', 'delete_multi', ):
-            stats[api_call] = {
-                'hit': 0,
-                'miss': 0,
-                'fractional-hit': 0,
-                'fractional-miss': 0,
-                'total': 0,
-                'total_time': 0,
-                'size': 0,
-            }
-
+        for api_call in dogpile_api_calls:
+            stats[api_call] = {'hit': 0,
+                               'miss': 0,
+                               'fractional-hit': 0,
+                               'fractional-miss': 0,
+                               'total': 0,
+                               'total_time': 0,
+                               'size': 0,
+                               }
         for r in self.logs:
             stats[r[0]]['total'] += 1
             stats[r[0]]['total_time'] += r[1]
@@ -72,20 +75,16 @@ class DogpileDebugPanel(DebugPanel):
                         stats[r[0]]['miss'] += 1
                     if dsize is not None:
                         stats[r[0]]['size'] += dsize
-
         total_size = 0
-        for api_call in ('get', 'get_multi', 'set', 'set_multi', 'delete', 'delete_multi', ):
+        for api_call in dogpile_api_calls:
             total_size += stats[api_call]['size']
-
-        self.data = {
-            'logs': self.logs,
-            'stats': stats,
-            'has_size': bool(total_size),
-        }
+        self.data = {'logs': self.logs,
+                     'stats': stats,
+                     'has_size': bool(total_size),
+                     }
         return super(DogpileDebugPanel, self).render_content(request)
 
     def render_vars(self, request):
-        return {
-            'static_path': request.static_url(STATIC_PATH),
-            'root_path': request.route_url(ROOT_ROUTE_NAME)
-        }
+        return {'static_path': request.static_url(STATIC_PATH),
+                'root_path': request.route_url(ROOT_ROUTE_NAME)
+                }

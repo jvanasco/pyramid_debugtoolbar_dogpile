@@ -41,18 +41,14 @@ def setup_dogpile_logging(request):
         calls_raw =  ordered list of calls
     """
     logging.debug('initializing setup_dogpile_logging')
-    return {
-        'api_calls': [],  # (api_call, duration, db, (k + result))
-    }
+    return {'api_calls': [],  # (api_call, duration, db, (k + result))
+            }
 
 
 class LoggingProxy(ProxyBackend):
     """
     This is an instance of ProxyBackend
     It times the performance of the backend and logs if we see cache hits or misses
-    
-    Each entry is a 
-    
     """
     _connection_kwargs = None
     _db = None
