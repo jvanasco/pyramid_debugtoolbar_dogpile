@@ -24,7 +24,7 @@ LoggedEvent = namedtuple('LoggedEvent', ['key', 'value', 'size', ])
 
 
 def includeme(config):
-    config.registry.settings['debugtoolbar.panels'].append(DogpileDebugPanel)
+    config.registry.settings['debugtoolbar.extra_panels'].append(DogpileDebugPanel)
     if 'mako.directories' not in config.registry.settings:
         config.registry.settings['mako.directories'] = []
 
