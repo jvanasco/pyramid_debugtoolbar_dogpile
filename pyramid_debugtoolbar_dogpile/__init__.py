@@ -1,3 +1,4 @@
+from __future__ import print_function
 # stdlib
 from collections import namedtuple
 import logging
@@ -13,6 +14,8 @@ from dogpile.cache.proxy import ProxyBackend
 # local
 from .panels.pyramid_dogpile import DogpileDebugPanel
 
+
+__VERSION__ = '0.2.1'
 
 # ==============================================================================
 
@@ -80,6 +83,7 @@ class LoggingProxy(ProxyBackend):
         self.proxied.set(key, value)
         _f = time.time()
         _d = _f - _s
+
         r = get_current_request()
         if r and hasattr(r, 'dogpile_logging'):
             r.dogpile_logging['api_calls'].append(("set", _d, self.db, [LoggedEvent(key, None, None), ]))

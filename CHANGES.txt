@@ -1,4 +1,8 @@
-0.2,0 - 2017.05.09
+0.2.1 - 2019.04.29
+	version bump to note Python3 classifier
+	version tracked in __init__.py
+
+0.2.0 - 2017.05.09
 	cleaned up some html
 	changing include to extra_panels so it works with debugtoolbar 4.0
 

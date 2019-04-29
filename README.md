@@ -24,6 +24,8 @@ This package works by wrapping requests to dogpile regions into a Proxy Backend.
 
 As of v0.1.5 you can sort-of track payload sizes.  This is **very experimental**.  See below.
 
+This package works in Python2.7 and Python 3.x
+
 
 how to use this package
 =======================
