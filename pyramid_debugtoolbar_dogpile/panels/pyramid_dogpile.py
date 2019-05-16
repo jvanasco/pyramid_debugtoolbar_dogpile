@@ -27,7 +27,7 @@ class DogpileDebugPanel(DebugPanel):
     nav_title = 'Dogpile'
 
     def __init__(self, request):
-        self.logs = request.dogpile_logging['api_calls']
+        self.logs = request.dogpile_logging['api_calls'] if hasattr(request, 'dogpile_logging') else None
 
     @property
     def has_content(self):

@@ -15,7 +15,8 @@ from dogpile.cache.proxy import ProxyBackend
 from .panels.pyramid_dogpile import DogpileDebugPanel
 
 
-__VERSION__ = '0.2.1'
+__VERSION__ = '0.2.2'
+
 
 # ==============================================================================
 
@@ -27,9 +28,9 @@ LoggedEvent = namedtuple('LoggedEvent', ['key', 'value', 'size', ])
 
 
 def includeme(config):
-    config.registry.settings['debugtoolbar.extra_panels'].append(DogpileDebugPanel)
-    if 'mako.directories' not in config.registry.settings:
-        config.registry.settings['mako.directories'] = []
+    config.add_debugtoolbar_panel(DogpileDebugPanel)
+    # if 'mako.directories' not in config.registry.settings:
+    #    config.registry.settings['mako.directories'] = []
 
     # custom property || app_domain / DomainObject
     config.add_request_method(

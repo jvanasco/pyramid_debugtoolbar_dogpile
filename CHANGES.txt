@@ -1,3 +1,7 @@
+0.2.2 - 2019.05.16
+	catches an issue where the panel is loaded but logging is not configured
+	call `.add_debugtoolbar_panel()`, bump min version of pyramid_debugtoolbar to 4.0
+
 0.2.1 - 2019.04.29
 	version bump to note Python3 classifier
 	version tracked in __init__.py
