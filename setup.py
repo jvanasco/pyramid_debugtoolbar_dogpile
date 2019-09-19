@@ -10,22 +10,18 @@ try:
     README = open(os.path.join(here, "README.md")).read()
     README = README.split("\n\n", 1)[0] + "\n"
 except:
-    README = ''
+    README = ""
 
 # store version in the init.py
-with open(os.path.join(os.path.dirname(__file__),
-                       'pyramid_debugtoolbar_dogpile',
-                       '__init__.py'
-                       )
-          ) as v_file:
-    VERSION = re.compile(
-        r".*__VERSION__ = '(.*?)'",
-        re.S).match(v_file.read()).group(1)
+with open(
+    os.path.join(
+        os.path.dirname(__file__), "pyramid_debugtoolbar_dogpile", "__init__.py"
+    )
+) as v_file:
+    VERSION = re.compile(r".*__VERSION__ = '(.*?)'", re.S).match(v_file.read()).group(1)
 
 
-requires = ['pyramid_debugtoolbar>=4.0',
-            'dogpile.cache',
-            ]
+requires = ["pyramid_debugtoolbar>=4.0", "dogpile.cache"]
 
 setup(
     name="pyramid_debugtoolbar_dogpile",
