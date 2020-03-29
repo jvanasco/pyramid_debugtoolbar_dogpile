@@ -53,7 +53,7 @@ how to use this package
 Tracking Payload Size
 =======================
 
-Tracking Payload Size is experimental and VERY TRICKY because the correct hooks do not live in the standard pacakges.  Most users will not be able to do it -- or want to do it.
+Tracking Payload Size is experimental and VERY TRICKY because the correct hooks do not live in the standard packages.  Most users will not be able to do it -- or want to do it.
 
 NOTE: This breaks/abuses dogpile's API.
 
