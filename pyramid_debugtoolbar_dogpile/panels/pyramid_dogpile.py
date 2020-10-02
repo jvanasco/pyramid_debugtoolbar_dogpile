@@ -13,8 +13,7 @@ dogpile_api_calls = ("get", "get_multi", "set", "set_multi", "delete", "delete_m
 
 
 class DogpileDebugPanel(DebugPanel):
-    """
-    """
+    """"""
 
     name = "Dogpile"
     template = "pyramid_debugtoolbar_dogpile.panels:templates/pyramid_dogpile.dbtmako"

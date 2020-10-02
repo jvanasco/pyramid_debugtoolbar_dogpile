@@ -43,7 +43,7 @@ def includeme(config):
 
 def setup_dogpile_logging(request):
     """
-        calls_raw =  ordered list of calls
+    calls_raw =  ordered list of calls
     """
     logging.debug("initializing setup_dogpile_logging")
     return {"api_calls": []}  # (api_call, duration, db, (k + result))

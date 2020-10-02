@@ -1,5 +1,7 @@
 0.2.3dev
 	black
+	* upgraded black; 20.8b1
+	* integrated with pre-commit
 
 0.2.2 - 2019.05.16
 	catches an issue where the panel is loaded but logging is not configured
