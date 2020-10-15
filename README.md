@@ -1,6 +1,8 @@
 pyramid_debugtoolbar_dogpile
 ============================
 
+Build Status: ![Python package](https://github.com/jvanasco/pyramid_debugtoolbar_dogpile/workflows/Python%20package/badge.svg)
+
 dogpile caching support for pyramid_debugtoolbar
 
 This package tracks the following dogpile api calls :
