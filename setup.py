@@ -18,21 +18,27 @@ with open(
         os.path.dirname(__file__), "pyramid_debugtoolbar_dogpile", "__init__.py"
     )
 ) as v_file:
-    VERSION = re.compile(r".*__VERSION__ = '(.*?)'", re.S).match(v_file.read()).group(1)
+    VERSION = re.compile(r'.*__VERSION__ = "(.*?)"', re.S).match(v_file.read()).group(1)
 
 
-requires = ["pyramid_debugtoolbar>=4.0", "dogpile.cache"]
+requires = [
+    "pyramid_debugtoolbar>=4.0",
+    "dogpile.cache",
+]
+tests_require = [
+    "pytest",
+]
+testing_extras = tests_require + []
+
 
 setup(
     name="pyramid_debugtoolbar_dogpile",
+    version=VERSION,
+    url="https://github.com/jvanasco/pyramid_debugtoolbar_dogpile",
     author="Jonathan Vanasco",
     author_email="jonathan@findmeon.com",
-    url="https://github.com/jvanasco/pyramid_debugtoolbar_dogpile",
-    version=VERSION,
     description="dogpile support for pyramid_debugtoolbar",
     long_description=README,
-    keywords="web pyramid",
-    license="MIT",
     classifiers=[
         "Intended Audience :: Developers",
         "Framework :: Pyramid",
@@ -41,9 +47,15 @@ setup(
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
     ],
-    packages=find_packages(),
-    include_package_data=True,
+    keywords="web pyramid",
+    license="MIT",
+    packages=find_packages(exclude=("tests",)),
     zip_safe=False,
+    include_package_data=True,
     install_requires=requires,
+    tests_require=tests_require,
+    extras_require={
+        "testing": testing_extras,
+    },
     test_suite="tests",
 )

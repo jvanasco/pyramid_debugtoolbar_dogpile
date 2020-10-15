@@ -37,7 +37,8 @@ how to use this package
 
 ## update your ENVIRONMENT.ini file
 
-    pyramid.includes = ... pyramid_debugtoolbar_dogpile
+    pyramid.includes = pyramid_debugtoolbar
+    debugtoolbar.includes = pyramid_debugtoolbar_dogpile
 
 ## update your caching configuration to use the proxy:
 

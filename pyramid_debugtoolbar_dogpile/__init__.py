@@ -16,7 +16,7 @@ from dogpile.cache.proxy import ProxyBackend
 from .panels.pyramid_dogpile import DogpileDebugPanel
 
 
-__VERSION__ = "0.2.2"
+__VERSION__ = "0.2.3dev0"
 
 
 # ==============================================================================
