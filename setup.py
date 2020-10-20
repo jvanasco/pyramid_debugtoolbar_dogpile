@@ -5,27 +5,23 @@ import re
 from setuptools import setup
 from setuptools import find_packages
 
-try:
-    here = os.path.abspath(os.path.dirname(__file__))
-    README = open(os.path.join(here, "README.md")).read()
-    README = README.split("\n\n", 1)[0] + "\n"
-except:
-    README = ""
+here = os.path.abspath(os.path.dirname(__file__))
 
+long_description = description = "dogpile support for pyramid_debugtoolbar"
+with open(os.path.join(here, "README.md")) as r_file:
+    long_description = r_file.read()
 # store version in the init.py
-with open(
-    os.path.join(
-        os.path.dirname(__file__), "pyramid_debugtoolbar_dogpile", "__init__.py"
-    )
-) as v_file:
+with open(os.path.join(here, "pyramid_debugtoolbar_dogpile", "__init__.py")) as v_file:
     VERSION = re.compile(r'.*__VERSION__ = "(.*?)"', re.S).match(v_file.read()).group(1)
 
 
 requires = [
-    "pyramid_debugtoolbar>=4.0",
     "dogpile.cache",
+    "pyramid",
+    "pyramid_debugtoolbar>=4.0",
 ]
 tests_require = [
+    "pyramid",
     "pytest",
 ]
 testing_extras = tests_require + []
@@ -37,8 +33,9 @@ setup(
     url="https://github.com/jvanasco/pyramid_debugtoolbar_dogpile",
     author="Jonathan Vanasco",
     author_email="jonathan@findmeon.com",
-    description="dogpile support for pyramid_debugtoolbar",
-    long_description=README,
+    description=description,
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     classifiers=[
         "Intended Audience :: Developers",
         "Framework :: Pyramid",
