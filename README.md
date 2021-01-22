@@ -32,7 +32,7 @@ This package works in Python2.7 and Python 3.x
 how to use this package
 =======================
 
-## install via github's master or grab a pypi distribution!
+## install via github's main or grab a pypi distribution!
 
 	pip install pyramid_debugtoolbar_dogpile
 	easy_install pyramid_debugtoolbar_dogpile
@@ -91,4 +91,4 @@ First Section - topline statistics
 
 Second Section - chronological list of cache operations. API calls and results are color-coded for quick review.
 
-![ScreenShot](https://raw.github.com/jvanasco/pyramid_debugtoolbar_dogpile/master/screenshot.png)
+![ScreenShot](https://raw.github.com/jvanasco/pyramid_debugtoolbar_dogpile/main/screenshot.png)
