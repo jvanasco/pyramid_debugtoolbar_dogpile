@@ -5,13 +5,13 @@ import re
 from setuptools import setup
 from setuptools import find_packages
 
-here = os.path.abspath(os.path.dirname(__file__))
+HERE = os.path.abspath(os.path.dirname(__file__))
 
 long_description = description = "dogpile support for pyramid_debugtoolbar"
-with open(os.path.join(here, "README.md")) as r_file:
+with open(os.path.join(HERE, "README.md")) as r_file:
     long_description = r_file.read()
 # store version in the init.py
-with open(os.path.join(here, "pyramid_debugtoolbar_dogpile", "__init__.py")) as v_file:
+with open(os.path.join(HERE, "pyramid_debugtoolbar_dogpile", "__init__.py")) as v_file:
     VERSION = re.compile(r'.*__VERSION__ = "(.*?)"', re.S).match(v_file.read()).group(1)
 
 
