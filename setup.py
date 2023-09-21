@@ -2,8 +2,9 @@
 """
 import os
 import re
-from setuptools import setup
+
 from setuptools import find_packages
+from setuptools import setup
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 
@@ -20,7 +21,7 @@ with open(
 requires = [
     "dogpile.cache",
     "pyramid",
-    "pyramid_debugtoolbar>=4.0",
+    "pyramid_debugtoolbar",
 ]
 tests_require = [
     "pyramid",
@@ -42,8 +43,13 @@ setup(
         "Intended Audience :: Developers",
         "Framework :: Pyramid",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "License :: OSI Approved :: MIT License",
     ],
     keywords="web pyramid",
@@ -52,6 +58,7 @@ setup(
         where="src",
     ),
     package_dir={"": "src"},
+    package_data={"pyramid_debugtoolbar_dogpile": ["py.typed"]},
     include_package_data=True,
     zip_safe=False,
     install_requires=requires,
