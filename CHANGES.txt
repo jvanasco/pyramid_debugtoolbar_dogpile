@@ -3,6 +3,7 @@
     * py3 only; drop py2
 	* added tests/__init__.py
 	* removed regression that disabled proper logging
+	* renamed logging to `request._dogpile_logging` (was `request.dogpile_logging`)
 
 0.2.4
 	packaging fixes
