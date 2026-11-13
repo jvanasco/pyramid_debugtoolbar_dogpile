@@ -15,7 +15,7 @@ except ImportError:  # Python 3.5.0 and 3.5.1 lack TYPE_CHECKING.
     TYPE_CHECKING = False
 
 if TYPE_CHECKING:
-    from typing import Any, Iterable, List, Mapping, Optional, Sequence, Tuple
+    from typing import Any, Callable, Iterable, List, Mapping, Optional, Sequence, Tuple
     import pyramid.config
     import pyramid.request
 
@@ -85,9 +85,19 @@ class LoggingProxy(ProxyBackend):
     def set(self, key, value):
         # type: (Any, Any) -> None
         """Store one value and record its key."""
+        return self._log_set(self.proxied.set, key, value)
+
+    def set_serialized(self, key, value):
+        # type: (Any, bytes) -> None
+        """Record a serialized backend call under its ordinary operation name."""
+        return self._log_set(self.proxied.set_serialized, key, value)
+
+    def _log_set(self, operation, key, value):
+        # type: (Callable[[Any, Any], None], Any, Any) -> None
+        """Time the backend call and record the result in the request log."""
         log = _request_log()
         start = perf_counter()
-        self.proxied.set(key, value)
+        operation(key, value)
         if log is not None:
             log.append(
                 ("set", perf_counter() - start, self.db, [LoggedEvent(key, None, None)])
@@ -96,9 +106,19 @@ class LoggingProxy(ProxyBackend):
     def set_multi(self, mapping):
         # type: (Mapping) -> None
         """Store several values and record their keys."""
+        return self._log_set_multi(self.proxied.set_multi, mapping)
+
+    def set_serialized_multi(self, mapping):
+        # type: (Mapping[Any, bytes]) -> None
+        """Record a serialized backend call under its ordinary operation name."""
+        return self._log_set_multi(self.proxied.set_serialized_multi, mapping)
+
+    def _log_set_multi(self, operation, mapping):
+        # type: (Callable[[Mapping], None], Mapping) -> None
+        """Time the backend call and record the result in the request log."""
         log = _request_log()
         start = perf_counter()
-        self.proxied.set_multi(mapping)
+        operation(mapping)
         if log is not None:
             duration = perf_counter() - start
             events = [LoggedEvent(key, None, None) for key in mapping]
@@ -107,9 +127,19 @@ class LoggingProxy(ProxyBackend):
     def get(self, key):
         # type: (Any) -> Any
         """Fetch one value and record its hit status."""
+        return self._log_get(self.proxied.get, key)
+
+    def get_serialized(self, key):
+        # type: (Any) -> Any
+        """Record a serialized backend call under its ordinary operation name."""
+        return self._log_get(self.proxied.get_serialized, key)
+
+    def _log_get(self, operation, key):
+        # type: (Callable[[Any], Any], Any) -> Any
+        """Time the backend call and record the result in the request log."""
         log = _request_log()
         start = perf_counter()
-        value = self.proxied.get(key)
+        value = operation(key)
         if log is not None:
             log.append(
                 ("get", perf_counter() - start, self.db, [_read_event(key, value)])
@@ -119,11 +149,21 @@ class LoggingProxy(ProxyBackend):
     def get_multi(self, keys):
         # type: (Iterable) -> Sequence
         """Fetch several values and match each result to its key."""
+        return self._log_get_multi(self.proxied.get_multi, keys)
+
+    def get_serialized_multi(self, keys):
+        # type: (Iterable) -> Sequence
+        """Record a serialized backend call under its ordinary operation name."""
+        return self._log_get_multi(self.proxied.get_serialized_multi, keys)
+
+    def _log_get_multi(self, operation, keys):
+        # type: (Callable[[Iterable], Sequence], Iterable) -> Sequence
+        """Time the backend call and record the result in the request log."""
         log = _request_log()
         if log is not None:
             keys = list(keys)
         start = perf_counter()
-        values = self.proxied.get_multi(keys)
+        values = operation(keys)
         if log is not None:
             duration = perf_counter() - start
             events = [_read_event(key, value) for key, value in zip(keys, values)]

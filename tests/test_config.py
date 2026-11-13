@@ -4,6 +4,8 @@ import unittest
 
 from dogpile.cache import make_region
 from dogpile.cache.api import CachedValue, NO_VALUE
+from dogpile.cache.proxy import ProxyBackend
+import pytest
 
 from pyramid_debugtoolbar_dogpile import LoggingProxy
 
@@ -146,3 +148,31 @@ def test_without_request():
     assert region.get("key") == "cached"
     region.delete("key")
     assert region.get("key") is NO_VALUE
+
+
+@pytest.mark.skipif(
+    not hasattr(ProxyBackend, "get_serialized"),
+    reason="installed dogpile.cache has no serialized backend API",
+)
+def test_serialized_operations():
+    # type: () -> None
+    """Log serialized backend operations without retaining payload bytes."""
+    request = testing.DummyRequest(dogpile_logging={"api_calls": []})
+    testing.setUp(request=request)
+    try:
+        region = make_region().configure(
+            "dogpile.cache.memory_pickle", wrap=[LoggingProxy]
+        )
+        region.set("one", "first")
+        region.set_multi({"two": "second"})
+        assert region.get("one") == "first"
+        assert region.get_multi(["two", "missing"]) == ["second", NO_VALUE]
+        logs = request.dogpile_logging["api_calls"]
+        assert [(name, events) for name, _, _, events in logs] == [
+            ("set", [("one", None, None)]),
+            ("set_multi", [("two", None, None)]),
+            ("get", [("one", True, None)]),
+            ("get_multi", [("two", True, None), ("missing", False, None)]),
+        ]
+    finally:
+        testing.tearDown()
