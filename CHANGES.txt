@@ -1,4 +1,12 @@
 unreleased
+	* Logged serialized cache reads and writes, including bulk operations.
+	* Dropped Python 2.7 support.
+	* Added setuptools<82 on Python 3.7–3.9 for Pyramid's pkg_resources import.
+	* Consolidated packaging and tox configuration, expanded CI through Python 3.15,
+	  and added HTML coverage reports.
+	* Escaped cache keys and database labels in the toolbar and fixed bulk delete
+	  timing, one-shot key iterables, and optional cache metadata handling.
+	* Registered the cache log on the main Pyramid application.
 	* added tests/__init__.py
 
 0.2.4
