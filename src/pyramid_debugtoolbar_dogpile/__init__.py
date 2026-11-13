@@ -1,7 +1,7 @@
 """Integrate dogpile cache diagnostics with Pyramid Debug Toolbar."""
 
 from collections import namedtuple
-import time
+from time import perf_counter
 
 from dogpile.cache.api import NO_VALUE, CachedValue
 from dogpile.cache.proxy import ProxyBackend
@@ -11,7 +11,7 @@ from .panels.pyramid_dogpile import DogpileDebugPanel
 
 try:
     from typing import TYPE_CHECKING
-except ImportError:
+except ImportError:  # Python 3.5.0 and 3.5.1 lack TYPE_CHECKING.
     TYPE_CHECKING = False
 
 if TYPE_CHECKING:
@@ -22,7 +22,6 @@ if TYPE_CHECKING:
 __VERSION__ = "0.2.4"
 
 LoggedEvent = namedtuple("LoggedEvent", ["key", "value", "size"])
-_timer = getattr(time, "perf_counter", time.time)
 
 
 def includeme(config):
@@ -56,15 +55,9 @@ def _read_event(key, value):
     # type: (Any, Any) -> LoggedEvent
     """Record hit status and a valid size without retaining the cached value."""
     size = value.metadata.get("sz") if isinstance(value, CachedValue) else None
-    if not isinstance(size, integer_types) or isinstance(size, bool) or size < 0:
+    if not isinstance(size, int) or isinstance(size, bool) or size < 0:
         size = None
     return LoggedEvent(key, value is not NO_VALUE, size)
-
-
-try:
-    integer_types = (int, long)
-except NameError:
-    integer_types = (int,)
 
 
 class LoggingProxy(ProxyBackend):
@@ -93,21 +86,21 @@ class LoggingProxy(ProxyBackend):
         # type: (Any, Any) -> None
         """Store one value and record its key."""
         log = _request_log()
-        start = _timer()
+        start = perf_counter()
         self.proxied.set(key, value)
         if log is not None:
             log.append(
-                ("set", _timer() - start, self.db, [LoggedEvent(key, None, None)])
+                ("set", perf_counter() - start, self.db, [LoggedEvent(key, None, None)])
             )
 
     def set_multi(self, mapping):
         # type: (Mapping) -> None
         """Store several values and record their keys."""
         log = _request_log()
-        start = _timer()
+        start = perf_counter()
         self.proxied.set_multi(mapping)
         if log is not None:
-            duration = _timer() - start
+            duration = perf_counter() - start
             events = [LoggedEvent(key, None, None) for key in mapping]
             log.append(("set_multi", duration, self.db, events))
 
@@ -115,10 +108,12 @@ class LoggingProxy(ProxyBackend):
         # type: (Any) -> Any
         """Fetch one value and record its hit status."""
         log = _request_log()
-        start = _timer()
+        start = perf_counter()
         value = self.proxied.get(key)
         if log is not None:
-            log.append(("get", _timer() - start, self.db, [_read_event(key, value)]))
+            log.append(
+                ("get", perf_counter() - start, self.db, [_read_event(key, value)])
+            )
         return value
 
     def get_multi(self, keys):
@@ -127,10 +122,10 @@ class LoggingProxy(ProxyBackend):
         log = _request_log()
         if log is not None:
             keys = list(keys)
-        start = _timer()
+        start = perf_counter()
         values = self.proxied.get_multi(keys)
         if log is not None:
-            duration = _timer() - start
+            duration = perf_counter() - start
             events = [_read_event(key, value) for key, value in zip(keys, values)]
             log.append(("get_multi", duration, self.db, events))
         return values
@@ -139,11 +134,16 @@ class LoggingProxy(ProxyBackend):
         # type: (Any) -> None
         """Delete one value and record its key."""
         log = _request_log()
-        start = _timer()
+        start = perf_counter()
         self.proxied.delete(key)
         if log is not None:
             log.append(
-                ("delete", _timer() - start, self.db, [LoggedEvent(key, None, None)])
+                (
+                    "delete",
+                    perf_counter() - start,
+                    self.db,
+                    [LoggedEvent(key, None, None)],
+                )
             )
 
     def delete_multi(self, keys):
@@ -152,9 +152,9 @@ class LoggingProxy(ProxyBackend):
         log = _request_log()
         if log is not None:
             keys = list(keys)
-        start = _timer()
+        start = perf_counter()
         self.proxied.delete_multi(keys)
         if log is not None:
-            duration = _timer() - start
+            duration = perf_counter() - start
             events = [LoggedEvent(key, None, None) for key in keys]
             log.append(("delete_multi", duration, self.db, events))

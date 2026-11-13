@@ -34,7 +34,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python: ["2.7", "3.5", "3.6", "3.7", "3.8"]
+        python: ["3.5", "3.6", "3.7", "3.8"]
     steps:
       - uses: actions/checkout@v4
       - name: Test with the legacy Python image
