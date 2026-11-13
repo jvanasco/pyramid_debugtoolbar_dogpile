@@ -5,7 +5,6 @@ from pyramid_debugtoolbar.panels import DebugPanel
 from pyramid_debugtoolbar.utils import STATIC_PATH
 from pyramid_debugtoolbar.utils import ROOT_ROUTE_NAME
 
-
 # ==============================================================================
 
 
@@ -59,7 +58,7 @@ class DogpileDebugPanel(DebugPanel):
             # dk - dogpile key
             # dr - dogpile result
             if r[0] == "get_multi":
-                for (dk, dr, dsize) in r[3]:
+                for dk, dr, dsize in r[3]:
                     if dr is True:
                         stats[r[0]]["fractional-hit"] += 1
                     elif dr is False:
@@ -67,7 +66,7 @@ class DogpileDebugPanel(DebugPanel):
                     if dsize is not None:
                         stats[r[0]]["size"] += dsize
             else:
-                for (dk, dr, dsize) in r[3]:
+                for dk, dr, dsize in r[3]:
                     if dr is True:
                         stats[r[0]]["hit"] += 1
                     elif dr is False:
