@@ -1,4 +1,4 @@
-unreleased
+1.0.0
 	* Logged serialized cache reads and writes, including bulk operations.
 	* Dropped Python 2.7 support.
 	* Added setuptools<82 on Python 3.7–3.9 for Pyramid's pkg_resources import.

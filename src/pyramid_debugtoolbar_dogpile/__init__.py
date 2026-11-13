@@ -19,7 +19,7 @@ if TYPE_CHECKING:
     import pyramid.config
     import pyramid.request
 
-__VERSION__ = "0.2.4"
+__VERSION__ = "1.0.0"
 
 LoggedEvent = namedtuple("LoggedEvent", ["key", "value", "size"])
 
